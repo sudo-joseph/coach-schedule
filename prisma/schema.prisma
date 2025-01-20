@@ -31,6 +31,8 @@ model User {
 
 model CoachAvailability {
   id        Int      @id @default(autoincrement())
+  startTime DateTime
+  EndTime   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   coachId   Int
