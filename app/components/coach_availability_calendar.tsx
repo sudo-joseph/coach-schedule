@@ -5,6 +5,7 @@ import { ProcessedEvent, EventActions } from "@aldabil/react-scheduler/types";
 import { WeekProps } from "@aldabil/react-scheduler/views/Week";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "@/app/constants/constants";
 
 type CoachAvailability = {
   id: number;
@@ -31,14 +32,11 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
   useEffect(() => {
     const fetchCoachAvailability = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/coach_availability",
-          {
-            params: {
-              coachId: userId,
-            },
-          }
-        );
+        const response = await axios.get(`${BASE_URL}coach_availability`, {
+          params: {
+            coachId: userId,
+          },
+        });
         setCoachAvailabilities(response.data);
       } catch (error) {
         console.error("Error fetching coach availability:", error);
@@ -56,7 +54,8 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
       try {
         const startTime = new Date(event.start);
         const endTime = new Date(startTime);
-        endTime.setHours(startTime.getHours() + 2); //This is a work around until we can make this work through the picker logic.
+        endTime.setHours(startTime.getHours() + 2);
+        //This is a work around until we can make this work through the picker logic.
 
         event.end = endTime;
 
@@ -65,9 +64,8 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
           EndTime: endTime,
           coachId: userId,
         };
-
         const response = await axios.put(
-          "http://localhost:3000/api/coach_availability",
+          `${BASE_URL}coach_availability`,
           newAvailability
         );
 
@@ -105,9 +103,8 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
         EndTime: endTime,
         coachId: userId,
       };
-
       const response = await axios.post(
-        `http://localhost:3000/api/coach_availability`,
+        `${BASE_URL}coach_availability`,
         updatedAvailability
       );
       setCoachAvailabilities((prevState) =>
@@ -122,9 +119,7 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
 
   const handleEventDelete = async (deletedEventId: Number | String) => {
     try {
-      await axios.delete(
-        `http://localhost:3000/api/coach_availability?id=${deletedEventId}`
-      );
+      await axios.delete(`${BASE_URL}coach_availability?id=${deletedEventId}`);
 
       setCoachAvailabilities((prevState) =>
         prevState.filter((avail) => avail.id !== deletedEventId)
