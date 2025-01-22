@@ -66,35 +66,35 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
           coachId: userId,
         };
 
-        console.log("Sending body:", newAvailability);
-
         const response = await axios.put(
           "http://localhost:3000/api/coach_availability",
           newAvailability
         );
+
         setCoachAvailabilities((prevState) =>
-          prevState.map((avail) =>
-            avail.id === event.event_id ? response.data : avail
-          )
+          response.status === 201 ? [...prevState, response.data] : prevState
         );
       } catch (error) {
         console.error("Error adding new availability:", error);
       }
     }
+    if (action === "edit") {
+      handleEventEdit(event);
+    }
+
     return event;
   };
 
   const handleEventDrop = async (
-    event: React.DragEvent<HTMLButtonElement>, // Drag event from the button
+    event: React.DragEvent<HTMLButtonElement>,
     droppedOn: Date,
     updatedEvent: ProcessedEvent,
     originalEvent: ProcessedEvent
   ) => {
-    console.log("here");
-    console.log(event);
-    console.log(droppedOn);
-    console.log(originalEvent);
-    console.log(updatedEvent);
+    handleEventEdit(updatedEvent);
+  };
+
+  const handleEventEdit = async (updatedEvent: ProcessedEvent) => {
     try {
       const startTime = new Date(updatedEvent.start);
       const endTime = new Date(updatedEvent.end);
@@ -106,72 +106,21 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
         coachId: userId,
       };
 
-      console.log(updatedAvailability);
-
-      // Send PUT request to update the availability on the server
       const response = await axios.post(
         `http://localhost:3000/api/coach_availability`,
         updatedAvailability
       );
-
-      // Update local state with the updated availability
+      console.log("test");
+      console.log(response.status);
       setCoachAvailabilities((prevState) =>
-        prevState.map((avail) =>
-          avail.id === updatedEvent.event_id ? response.data : avail
+        prevState.map(
+          (avail) => (response.status = 200 ? response.data : avail)
         )
       );
     } catch (error) {
       console.error("Error updating availability:", error);
     }
   };
-  //   try {
-  //     const startTime = new Date(updatedEvent.start);
-  //     const endTime = new Date(startTime);
-  //     endTime.setHours(startTime.getHours() + 2); //This is a work around until we can make this work through the picker logic.
-
-  //     const newAvailability = {
-  //       startTime: startTime,
-  //       EndTime: endTime,
-  //       coachId: userId,
-  //     };
-
-  //     const response = await axios.post('http://localhost:3000/api/coach_availability', newAvailability);
-  //     setCoachAvailabilities(prevState => prevState.map(avail =>
-  //       avail.id === updatedEvent.event_id ? response.data : avail
-  //     ));
-  //   } catch (error) {
-  //     console.error('Error adding new availability:', error);
-  //   }
-  // };
-
-  // const handleEventEdit = async (updatedEvent: ProcessedEvent) => {
-  //   try {
-  //     const startTime = new Date(updatedEvent.start);
-  //     const endTime = new Date(startTime);
-  //     endTime.setHours(startTime.getHours() + 2);
-
-  //     const updatedAvailability = {
-  //       startTime: startTime,
-  //       EndTime: endTime,
-  //       coachId: userId,
-  //     };
-
-  //     // Send PUT request to update the availability on the server
-  //     const response = await axios.put(
-  //       `http://localhost:3000/api/coach_availability/${updatedEvent.event_id}`,
-  //       updatedAvailability
-  //     );
-
-  //     // Update local state with the updated availability
-  //     setCoachAvailabilities((prevState) =>
-  //       prevState.map((avail) =>
-  //         avail.id === updatedEvent.event_id ? response.data : avail
-  //       )
-  //     );
-  //   } catch (error) {
-  //     console.error("Error updating availability:", error);
-  //   }
-  // };
 
   const handleEventDelete = async (deletedEventId: Number | String) => {
     try {
@@ -198,8 +147,8 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
   const weekSettings: WeekProps = {
     weekDays: [0, 1, 2, 3, 4, 5],
     weekStartOn: 0,
-    startHour: 9,
-    endHour: 17,
+    startHour: 8,
+    endHour: 21,
     step: 60,
     navigation: false,
     disableGoToDay: true,
