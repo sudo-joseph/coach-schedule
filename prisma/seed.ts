@@ -35,10 +35,26 @@ async function main() {
 
   await prisma.coachAvailability.createMany({
     data: [
-      { coachId: alice.id, startTime: tomorrow, EndTime: new Date(tomorrow.getTime() + 60 * 60 * 1000) },
-      { coachId: alice.id, startTime: dayAfterTomorrow, EndTime: new Date(dayAfterTomorrow.getTime() + 60 * 60 * 1000) },
-      { coachId: bob.id, startTime: tomorrow, EndTime: new Date(tomorrow.getTime() + 60 * 60 * 1000) },
-      { coachId: bob.id, startTime: dayAfterTomorrow, EndTime: new Date(dayAfterTomorrow.getTime() + 60 * 60 * 1000) },
+      {
+        coachId: alice.id,
+        startTime: tomorrow,
+        EndTime: new Date(tomorrow.getTime() + 2 * 60 * 60 * 1000),
+      },
+      {
+        coachId: alice.id,
+        startTime: dayAfterTomorrow,
+        EndTime: new Date(dayAfterTomorrow.getTime() + 2 * 60 * 60 * 1000),
+      },
+      {
+        coachId: bob.id,
+        startTime: tomorrow,
+        EndTime: new Date(tomorrow.getTime() + 2 * 60 * 60 * 1000),
+      },
+      {
+        coachId: bob.id,
+        startTime: dayAfterTomorrow,
+        EndTime: new Date(dayAfterTomorrow.getTime() + 2 * 60 * 60 * 1000),
+      },
     ],
   });
 
