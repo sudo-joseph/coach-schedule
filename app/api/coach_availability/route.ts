@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     const coachAvailabilities = await prisma.coachAvailability.findMany({
       where: whereCondition,
     });
-    console.log(coachAvailabilities);
     return NextResponse.json(coachAvailabilities); // Return data as JSON
   } catch (error) {
     console.error("Error fetching coach availability:", error);

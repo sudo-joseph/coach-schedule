@@ -110,8 +110,6 @@ export const CoachAvailability: React.FC<CoachAvailabilityProps> = ({
         `http://localhost:3000/api/coach_availability`,
         updatedAvailability
       );
-      console.log("test");
-      console.log(response.status);
       setCoachAvailabilities((prevState) =>
         prevState.map(
           (avail) => (response.status = 200 ? response.data : avail)
